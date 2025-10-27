@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .section{
+            border: 2px solid #333;
+            text-align: center;
+            font-weight: 700;
+            padding: 6px 0;
+            margin: 8px 0;
+        }
+        .image-box{
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            box-shadow: inset;
+        }
+        .box1{
+            background-color: red;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+        }
+        .box2{
+            background-color: green;
+            top: 50px;
+            left: 50px;
+            z-index: 80;
+        }
+        .box3{
+            background-color: blue;
+            top: 90px;
+            left: 90px;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="text-box">텍스트
+        </div>
+        <div class="image-box">
+            <div class="box box1"></div>
+            <div class="box box2"></div>
+            <div class="box box3"></div>
+        </div>
+        <div class="text-box">텍스트</div>
+    </div>
+
+
+</body>
+</html>

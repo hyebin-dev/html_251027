@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .menu-box{
+            width: 200px;
+            float: left;
+        }
+        .menu-box>a{
+            text-decoration: none;
+            display: block;
+            border: 1px solid black;
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+            color: black;
+            border-bottom: none;
+        }
+        .menu-box>.end{
+            border-bottom: 1px solid black;
+        }
+        .menu-box>a:hover{
+            background-color: bisque;
+        }
+        .image-box{
+            width: calc(100% - 210px);
+            height: 700px;
+            float: right;
+            background-image: url(../image/강아지2.jpg);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu-box">
+            <a href="">menu1</a>
+            <a href="">menu2</a>
+            <a href="">menu3</a>
+            <a href="" class="end">menu4</a>
+        </div>
+        <div class="image-box"></div>
+    </div>
+</body>
+</html>
