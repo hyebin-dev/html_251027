@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>01_gugudan</title>
+    <style>
+        body{
+            margin:16px;color:#000;
+            font-family:Arial,"Malgun Gothic","맑은 고딕",sans-serif;
+        }
+        ol{
+            margin:10px 0 12px 0;
+            padding-left:0;
+            list-style-position:inside;
+        }
+        .row{
+            display:flex;
+            align-items:center;
+            margin:6px 0;
+        }
+        .expr{
+            min-width:140px;
+        }
+        .bar{
+            width:260px;
+            height:28px;
+            display:flex;
+            align-items:center;
+            background:#F3D06F;
+            border:1px solid #A9832D;
+            border-radius:0;
+            padding:0 6px;
+        }
+        .bar input{
+            flex:1;
+            height:22px;
+            border:0;
+            outline:0;
+            background:transparent;
+            font-size:16px;
+        }
+        .mark{
+            width:22px;
+            text-align:center;
+            font-size:18px;
+            font-weight:700;
+        }
+        .ok{
+            color:#1A9A41;
+        }
+        .no{
+            color:#C02B2B;
+        }
+        #score{
+            margin-top:12px;
+            font-size:18px;
+            font-weight:700;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn-make">문제 출제</button>
+    <ol id="list"></ol>
+    <button id="btn-check">정답 확인</button>
+    <div id="score">정답갯수 : 0, 정답률 : 0%</div>
+    <script>
+        (function(){
+        const list   = document.getElementById('list');
+        const score  = document.getElementById('score');
+        const btnMk  = document.getElementById('btn-make');
+        const btnChk = document.getElementById('btn-check');
+        let items = [];
+
+        function r(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+        function make(){
+            list.innerHTML = '';
+            items = [];
+            for(let i=0;i<10;i++){
+            const a = r(1,10), b = r(1,10);
+            const ans = a*b;
+
+            const li = document.createElement('li'); li.className='row';
+
+            const expr = document.createElement('div');
+            expr.className='expr';
+            expr.textContent = (i+1)+'. '+a+' * '+b+' =';
+
+            const bar  = document.createElement('div');
+            bar.className='bar';
+            const input= document.createElement('input');
+            input.type='text';
+            const mark = document.createElement('span');
+            mark.className='mark';
+
+            bar.appendChild(input);
+            bar.appendChild(mark);
+            li.appendChild(expr);
+            li.appendChild(bar);
+            list.appendChild(li);
+
+            items.push({a,b,ans,inputEl:input,markEl:mark});
+            }
+            score.textContent = '정답갯수 : 0, 정답률 : 0%';
+        }
+
+        function check(){
+            if(items.length===0) return;
+            let correct=0;
+            items.forEach(it=>{
+            const v = Number(it.inputEl.value);
+            const ok = Number.isFinite(v) && v===it.ans;
+            it.markEl.textContent = ok ? '✔' : '✘';
+            it.markEl.className = 'mark ' + (ok ? 'ok' : 'no');
+            if(ok) correct++;
+            });
+            score.textContent = '정답갯수 : '+correct+', 정답률 : '+(correct*10)+'%';
+        }
+
+        btnMk.addEventListener('click', make);
+        btnChk.addEventListener('click', check);
+        })();
+    </script>
+</body>
+</html>

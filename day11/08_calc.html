@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="printResult">0</h1>
+        <div class="area">
+            <button type="button" value="7">7</button>
+            <button type="button" value="8">8</button>
+            <button type="button" value="9">9</button>
+            <button type="button" value="+">+</button>
+            <button type="button" value="4">4</button>
+            <button type="button" value="5">5</button>
+            <button type="button" value="6">6</button>
+            <button type="button" value="-">-</button>
+            <button type="button" value="1">1</button>
+            <button type="button" value="2">2</button>
+            <button type="button" value="3">3</button>
+            <button type="button" value="*">*</button>
+            <button type="button" value=".">.</button>
+            <button type="button" value="0">0</button>
+            <button type="button" value="=">=</button>
+            <button type="button" value="/">/</button>
+            <button type="button" value="C" class="c">C</button>
+        </div>
+    </div>
+    <script>
+        const display = document.getElementById('printResult');
+        const area = document.querySelector('.area');
+
+        let prev = null;
+        let cur = '0';
+        let op = null;
+        let justEvaluated = false;
+        const MAX_LEN = 16;
+
+        function render(){
+        display.textContent = cur.length > MAX_LEN ? cur.slice(0, MAX_LEN) : cur;
+        }
+
+        function inputDigit(d){
+        if (justEvaluated){ cur = '0'; justEvaluated = false; }
+        if (d === '.'){ if (!cur.includes('.')) cur += '.'; return render(); }
+        cur = (cur === '0') ? d : cur + d;
+        render();
+        }
+
+        function setOperator(next){
+        if (op && prev !== null && !justEvaluated){
+            evaluate();
+        }else{
+            prev = parseFloat(cur);
+        }
+        op = next;
+        cur = '0';
+        justEvaluated = false;
+        render();
+        }
+
+        function evaluate(){
+        if (op === null || prev === null) return;
+        const a = prev, b = parseFloat(cur);
+        let result;
+        switch(op){
+            case '+': result = a + b; break;
+            case '-': result = a - b; break;
+            case '*': result = a * b; break;
+            case '/':
+            if (b === 0){ cur = 'Error'; prev = null; op = null; render(); justEvaluated = true; return; }
+            result = a / b; break;
+        }
+        cur = String(+parseFloat(result.toFixed(12)));
+        prev = null; op = null; justEvaluated = true; render();
+        }
+
+        function clearAll(){ prev = null; cur = '0'; op = null; justEvaluated = false; render(); }
+
+        area.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const v = btn.value;
+        if (v === 'C' || v === 'c') return clearAll();
+        if (v === '=') return evaluate();
+        if (['+','-','*','/'].includes(v)) return setOperator(v);
+        inputDigit(v);
+        });
+
+        window.addEventListener('keydown', e => {
+        const k = e.key;
+        if (/\d/.test(k)) inputDigit(k);
+        else if (k === '.') inputDigit('.');
+        else if (['+','-','*','/'].includes(k)) setOperator(k);
+        else if (k === 'Enter' || k === '=') evaluate();
+        else if (k === 'Escape') clearAll();
+        else if (k === 'Backspace' && !justEvaluated){
+            cur = (cur.length > 1) ? cur.slice(0, -1) : '0';
+            render();
+        }
+        });
+
+        render(); 
+    </script>
+</body>
+</html>
