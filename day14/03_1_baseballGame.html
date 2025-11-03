@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root{
+        --bg:#f4faf6;
+        --ink:#0f172a;
+        --border:#e2e8f0;
+        --btn-green:#16a085;
+        --btn-blue:#2563eb;
+        --btn-gray:#eef2f7;
+        --zebra1:rgba(255, 255, 179, 0.849);
+        --zebra2:white;
+        }
+        *{
+            box-sizing:border-box;
+        }
+        html,body{
+        margin:0;
+        padding:0;
+        background:var(--bg);
+        color:var(--ink);
+        line-height:1.5;
+        text-align:center;
+        }
+        .bar{
+        display:inline-flex;
+        gap:10px;
+        margin:22px auto 10px;
+        padding:8px 10px;
+        border-radius:999px;
+        background:white;
+        border:1px solid var(--border);
+        box-shadow:0 4px 14px rgba(0,0,0,.08);
+        }
+        button{
+        appearance:none;
+        cursor:pointer;
+        border-radius:999px;
+        border:1px solid var(--border);
+        padding:8px 14px;
+        font-weight:800;
+        background:#f8fafc;
+        transition:.18s ease-in-out;
+        }
+        button:hover{
+        transform:translateY(-1px);
+        box-shadow:0 3px 8px rgba(0,0,0,.15);
+        }
+        button:active{
+        transform:translateY(0);
+        box-shadow:none;
+        }
+        button:disabled{
+        opacity:.6;
+        cursor:not-allowed;
+        transform:none;
+        box-shadow:none;
+        }
+        #startBtn{
+        background:var(--btn-green);
+        color:#fff;
+        border-color:transparent;
+        }
+        #resetBtn{
+        background:var(--btn-gray);
+        }
+        #tryBtn{
+        background:var(--btn-blue);
+        color:white;
+        border-color:transparent;
+        }
+        h1{
+        font-size:44px;
+        font-weight:900;
+        margin:14px 0 18px;
+        letter-spacing:-0.5px;
+        }
+        #myNum{
+        width:240px;
+        height:38px;
+        border:2px solid black;
+        border-radius:10px;
+        padding:0 12px;
+        font-size:18px;
+        outline:none;
+        background: white;
+        transition:border-color .18s, box-shadow .18s, transform .18s;
+        }
+        #myNum:focus{
+        border-color:var(--btn-blue);
+        box-shadow:0 0 0 4px rgba(37,99,235,.18);
+        transform:translateY(-1px);
+        }
+        ol{
+        font-size:18px;
+        display:inline-block;
+        margin:22px auto 40px;
+        padding:10px 10px 14px 30px;
+        background:#ffffff;
+        border-radius:16px;
+        border:1px solid var(--border);
+        box-shadow:0 10px 30px rgba(0,0,0,.12);
+        text-align:left; 
+        }
+        #tries li{
+        border-radius:10px;
+        border:1px solid var(--border);
+        padding:8px 12px;
+        margin:8px 6px;
+        }
+        #tries li:nth-child(odd){
+        background:var(--zebra1);
+        }
+        #tries li:nth-child(even){
+        background:var(--zebra2);
+        }
+    </style>
+</head>
+<body>
+    <div class="bar">
+        <button id="startBtn">게임시작</button>
+        <button id="resetBtn">다시시작</button>
+    </div>
+    <h1 id="comMsg"></h1>
+    숫자입력 : <input type="text" id="myNum" disabled>
+    <button id="tryBtn" disabled>게임확인</button>
+    <ol id="tries"></ol>
+
+    <script>
+        /*
+            1. 게임시작 전 입력 금지.
+            2. 중복 값 X
+            3. 반드시 3자리
+            4. 문자 X
+        */
+        // comNum 배열과, 사용자 value 값의 배열 비교
+        // 값 위치가 동일하면 strike, 값만 동일하면 ball
+        // 일치하는 값이 없다면 out
+
+        const $start = document.getElementById('startBtn');
+        const $reset = document.getElementById('resetBtn');
+        const $msg = document.getElementById('comMsg');
+        const $num = document.getElementById('myNum');
+        const $try = document.getElementById('tryBtn');
+        const $list = document.getElementById('tries');
+
+        let playing = false;
+        let answer = [];
+
+        function enablePlay(){
+            $num.disabled=false;
+            $try.disabled=false;
+            $num.focus();
+        }
+        function disablePlay(){
+            $num.disabled=true;
+            $try.disabled=true;
+        }
+        function resetUI(){
+            $list.innerHTML='';
+            $num.value='';
+        }
+
+        function makeAnswer(){
+        const s = new Set();
+        while(s.size < 3){
+            s.add(Math.floor(Math.random()*10));
+        }
+        answer = [...s];
+        }
+
+        function validateRaw(raw){
+        if(!playing) return { ok:false, arr:null };
+
+        const chars = [...raw.trim()];
+        const charSet = new Set(chars);
+        const digitSet = new Set(chars.filter(c => /\d/.test(c)));
+        const nonDigitSet = new Set(chars.filter(c => !/\d/.test(c)));
+
+        const lenOk   = new Set([chars.length]).has(3);
+        const noChar  = nonDigitSet.size === 0; 
+        const unique  = charSet.size === 3;
+        const digits3 = digitSet.size === 3;
+
+        const ok = lenOk && noChar && unique && digits3;
+        if(!ok) return { ok:false, arr:null };
+
+        const arr = chars.map(n => Number(n));
+        return { ok:true, arr };
+        }
+
+        function judge(guess){
+        let s=0,b=0;
+        for(let i=0;i<3;i++){
+            if(guess[i]===answer[i]) s++;
+            else if(answer.includes(guess[i])) b++;
+        }
+        return {s,b};
+        }
+
+        function print(line){
+        const li=document.createElement('li');
+        li.textContent=line;
+        $list.appendChild(li);
+        }
+
+        $start.addEventListener('click',()=>{
+        makeAnswer();
+        resetUI();
+        $msg.textContent='컴퓨터가 숫자를 결정하였습니다.';
+        enablePlay();
+        playing = true;
+        });
+
+        $reset.addEventListener('click',()=>{
+        makeAnswer();
+        resetUI();
+        $msg.textContent='컴퓨터가 숫자를 결정하였습니다.';
+        enablePlay();
+        playing = true;
+        });
+
+        function handleTry(){
+        const { ok, arr } = validateRaw($num.value);
+        if(!ok){
+            $msg.textContent = '유효하지 않은 숫자입니다.';
+            return false;
+        }
+        $msg.textContent = '컴퓨터가 숫자를 결정하였습니다.';
+        const {s,b} = judge(arr);
+        if(s===3){
+            print(`${arr.join(', ')} => success!!`);
+            disablePlay();
+            playing = false;
+            return true;
+        } else {
+            print(`${arr.join(', ')} => ${s}S, ${b}B`);
+            $num.value='';
+            $num.focus();
+            return true;
+        }
+        }
+
+        $try.addEventListener('click', handleTry);
+        $num.addEventListener('keydown', e => {
+            if(e.key==='Enter') handleTry();
+        });
+    </script>
+</body>
+</html>

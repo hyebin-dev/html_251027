@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body{ 
+            margin: 0;
+            padding: 0; 
+            background: #fff; 
+        }
+        h1{
+            margin: 36px 0 18px;
+            text-align: center;
+            font-size: 32px;
+            font-weight: 800;
+        }
+        form{
+            width: 520px;
+            margin: 0 auto;
+            background: #9fcec3;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #item {
+            width: 340px;
+            height: 28px;
+            border: 1px solid #d8d8d8;
+            outline: none;
+            background: #fff;
+            border-radius: 8px;
+            padding: 0 12px;
+            font-size: 14px;
+        }
+        #btn{
+            height: 30px;
+            padding: 0 12px;
+            font-size: 14px;
+            border: 1px solid #cfcfcf;
+            border-radius: 6px;
+            background: #f3f3f3;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .list-wrap{
+            width: 520px;
+            margin: 0 auto 40px;
+        }
+        #itemList{
+            list-style: none;
+            padding-left: 0;
+            margin: 12px 0 0;
+        }
+        #itemList li{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 34px;
+            padding: 0 10px;
+            font-size: 14px;
+            border: 1px solid #e0e0e0;
+            border-left: none;
+            border-right: none;
+        }
+        #itemList li.odd{
+            background: #eab9c2;
+        }
+        #itemList li.even{
+            background: #eef06a;
+        }
+        .del{
+            width: 28px;
+            height: 24px;
+            line-height: 22px;
+            text-align: center;
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            background: #fff;
+            color: #c3182b;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>여행 준비물 점검 목록</h1>
+    <form action="" onsubmit="return false;">
+        <input type="text" id="item" />
+        <button type="button" id="btn">추가</button>
+    </form>
+    <div class="list-wrap">
+        <ul id="itemList"></ul>
+    </div>
+
+    <script>
+        const $item = document.getElementById('item');
+        const $btn = document.getElementById('btn');
+        const $list = document.getElementById('itemList');
+
+        function stripe() {
+        [...$list.children].forEach((li, idx) => {
+            li.classList.remove('odd', 'even');
+            li.classList.add(idx % 2 === 0 ? 'odd' : 'even');
+        });
+        }
+
+        function addItem(text) {
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = text;
+
+        const del = document.createElement('button');
+        del.className = 'del';
+        del.type = 'button';
+        del.textContent = '×';
+        del.addEventListener('click', () => {
+            li.remove();
+            stripe();
+        });
+
+        li.append(span, del);
+        $list.appendChild(li);
+        stripe();
+        }
+
+        function handleAdd() {
+        const v = $item.value.trim();
+        if (!v) return;
+        addItem(v);
+        $item.value = '';
+        $item.focus();
+        }
+
+        $btn.addEventListener('click', handleAdd);
+        $item.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleAdd();
+        });
+    </script>
+</body>
+</html>
