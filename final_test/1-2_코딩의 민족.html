@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: Jua-Regular;
+            src: url(../final_test/font/Jua/Jua-Regular.ttf);
+        }
+        body{
+            background-color: beige;
+            font-family: Jua-Regular;
+            text-align: center;
+            color: rgb(69, 69, 80);
+        }
+        .container>header{
+            margin: 20px;
+        }
+        .container>header>h1{
+            font-size: 50px;
+        }
+        .container>header>h3{
+            font-size: 30px;
+            margin-bottom: 50px;
+        }
+        .container .menu{
+            width: 300px;
+            background-color: white;
+            margin: 20px auto 50px;
+            border-radius: 10px;
+        }
+        .container .menu>div:first-child{
+            width: 300px;
+            height: 200px;
+            background-color: blueviolet;
+            border-radius: 10px 10px 0 0;
+            background-position: center;
+            background-size: cover;
+        }
+        .container .menu>div:last-child{
+            padding: 10px;
+        }
+        .container .menu p:nth-of-type(3){
+            color: blue;
+        }
+        #s{
+            background-image: url(../final_test/image/치킨.jpg);
+        }
+        #s1{
+            background-image: url(../final_test/image/초밥.jpg);
+        }  
+        #s2{
+            background-image: url(../final_test/image/햄버거.jpg);
+        } 
+        #s3{
+            background-image: url(../final_test/image/비빔밥.jpg);
+        } 
+        footer{
+            position: fixed;
+            bottom: 0;
+            right: 0;
+        }
+        footer>img{
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>코딩의 민족</h1>
+            <h3>넌 코딩할 때가 제일 이뻐</h3>
+        </header>
+        <main>
+            <div class="menu">
+                <div id="s">
+                </div>
+                <div>
+                    <h2>코딩에 빠진 닭</h2>
+                    <p>주머니가 가벼운 당신의 마음까지 생각한 착한가격</p>
+                    <p><del>25,000원</del> 15,000원</p>
+                    <p>바로결제</p>
+                </div>
+            </div>
+            <div class="menu">
+                <div id="s1">
+                </div>
+                <div>
+                    <h2>코코 스시</h2>
+                    <p>주머니가 가벼운 당신의 마음까지 생각한 착한가격</p>
+                    <p><del>25,000원</del> 15,000원</p>
+                    <p>바로결제</p>
+                </div>
+            </div>
+            <div class="menu">
+                <div id="s2">
+                </div>
+                <div>
+                    <h2>코데리아</h2>
+                    <p>주머니가 가벼운 당신의 마음까지 생각한 착한가격</p>
+                    <p><del>25,000원</del> 15,000원</p>
+                    <p>바로결제</p>
+                </div>
+            </div>
+            <div class="menu">
+                <div id="s3">
+                </div>
+                <div>
+                    <h2>코가네</h2>
+                    <p>주머니가 가벼운 당신의 마음까지 생각한 착한가격</p>
+                    <p><del>25,000원</del> 15,000원</p>
+                    <p>바로결제</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
